@@ -1,19 +1,51 @@
-import React from "react";
-import PropTypes from 'prop-types'
+import React, { useContext } from "react";
+import propTypes from 'prop-types'
+import Context from "../context";
 
+const styles = {
+    li: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '.5rem, 1rem',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        marginBottom: '1rem',
+        fontSize: '18px',
+    },
+    input: {
+        marginRight: '1rem'
+    }
+}
+function TodoItem({todo, index, onChange}) {
+    const { removeTodo } = useContext(Context)
+    const classes = []
 
-function TodoItem({todo, index}) {
+    if (todo.completed) {
+        classes.push('done')
+    }
     return (
-        <li>
-            <strong>{index +1 }. </strong>
-            {todo.title}
+        <li style={styles.li}>
+            <span className={classes.join(' ')}>
+                <input type="checkbox" 
+                checked={todo.completed}
+                style={styles.input}
+                onChange={() => onChange(todo.id)} 
+            />
+                <strong>{index +1 }.</strong>
+                &nbsp;
+                {todo.title}
+            </span>
+
+            <button className="rm" onClick={ removeTodo.bind(null, todo.id) }>&times;</button>
         </li>
     )
 }
 
 // eslint-disable-next-line react/no-typos
-TodoItem.PropTypes = {
-    todo: PropTypes.object.isRequired,
-    index: PropTypes.number
+TodoItem.propTypes = {
+    todo: propTypes.object.isRequired,
+    index: propTypes.number,
+    onChange: propTypes.func.isRequired
 }
 export default TodoItem
